@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Page</title>
+
+    <style>
+        /* #showData {
+            display: grid;
+            grid-template-columns: repeat(3, 30%);
+            grid-gap: 30px;
+            padding-left: 20px;
+            align-items: stretch;
+        } */
+
+        #head {
+            border: 1px solid gray;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        #showData>div {
+            border: 1px solid gray;
+            display: flex;
+            justify-content: space-evenly;
+            margin: 2% 5% 2% 5%;
+        }
+
+        #showData img {
+            width: 80%;
+            padding: 20px;
+        }
+
+        #showdata h3 {
+            margin-left: 20px;
+        }
+
+        #c>input {
+            margin-left: 500px;
+            border: 5px solid blue;
+            width: 300px;
+            height: 50px;
+            border-radius: 30px;
+            font-size: 30px;
+            font-weight: bold;
+
+        }
+
+
+
+        #c>button,
+        #author {
+            background-color: blue;
+            color: white;
+            width: 100px;
+            height: 70px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #author {
+            width: 300px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="c">
+        <input type="text" name="" id="query" placeholder="Search" />
+        <button onclick="findMovie()">Search</button>
+    </div>
+    <br />
+    <br /><br />
+    <button id="author" href="">AUTHOR Login/Signup</button>
+    <br>
+    <br>
+    <div id="head">
+        <h2>BOOK NAME</h2>
+        <h2>AUTHOR NAME</h2>
+        <h2>CHAPTERS</h2>
+    </div>
+    <div id="showData"></div>
+</body>
+
+</html>
+
+<script>
+    var parent = document.getElementById("showData");
+
+    async function findMovie(searchMovie) {
+        var searchMovie = document.getElementById("query").value;
+
+        parent.innerHTML = null;
+
+        try {
+            let res = await fetch(`http://localhost:1234/books`);
+
+            let data = await res.json();
+            console.log(data)
+            showMovies(data);
+        } catch (e) {
+            console.log("e:", e);
+        }
+    }
+
+    function showMovies(movie) {
+        movie.forEach(function (m) {
+            let button = document.createElement("button");
+
+            //let div = document.createElement("div");
+            let div = document.createElement("div")
+            let name = document.createElement("h3");
+            name.innerHTML = m.name;
+            let author = document.createElement("h3");
+            author.innerHTML = m.author_id.first_name
+            console.log(author);
+            let chapters = document.createElement("h3")
+            chapters.innerHTML = m.chapter_id.pages
+            div.append(name, author, chapters);
+            parent.append(div);
+        });
+    }
+
+  // findMovie("avatar")
+</script>
